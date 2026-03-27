@@ -107,6 +107,18 @@ app.swagger_ui_parameters = {
     "filter": True,
 }
 
+# Override OpenAPI schema to inject our custom title/description
+_original_openapi = app.openapi
+
+def custom_openapi():
+    schema = _original_openapi()
+    schema["info"]["title"] = "Data Cleaning Environment API"
+    schema["info"]["version"] = "1.0.0"
+    schema["info"]["description"] = app.description
+    return schema
+
+app.openapi = custom_openapi
+
 
 # ── Mount our custom Gradio web UI at /web ───────────────────────────────────
 import gradio as gr
