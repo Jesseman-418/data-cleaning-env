@@ -1,0 +1,9 @@
+spec_version: 1
+name: data_cleaning_env
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+description: "A real-world data cleaning environment where AI agents fix messy tabular data through formatting standardization, missing value imputation, typo correction, and duplicate detection."
+author: "Team Devgods"
+version: "1.0.0"
