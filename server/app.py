@@ -9,9 +9,10 @@ Exposes the standard OpenEnv endpoints plus hackathon-required:
 """
 
 import os
+import sys
 
-# Enable the web interface
-os.environ["ENABLE_WEB_INTERFACE"] = "true"
+# Do NOT enable OpenEnv's default web interface — we mount our own Gradio app
+# os.environ["ENABLE_WEB_INTERFACE"] = "true"
 
 try:
     from openenv.core.env_server.http_server import create_app
@@ -20,35 +21,104 @@ except Exception as e:
         "openenv is required. Install with: pip install openenv-core"
     ) from e
 
-import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from models import DataCleaningAction, DataCleaningObservation
     from server.data_cleaning_env_environment import DataCleaningEnvironment
     from data_generator import TASKS
-    from server.web_ui import build_custom_ui
 except ImportError:
     from ..models import DataCleaningAction, DataCleaningObservation
     from .data_cleaning_env_environment import DataCleaningEnvironment
     from ..data_generator import TASKS
-    from .web_ui import build_custom_ui
 
 
-# Create the base OpenEnv app with custom Gradio UI
+# ── Create the base OpenEnv app (API only, no default Gradio) ────────────────
 app = create_app(
     DataCleaningEnvironment,
     DataCleaningAction,
     DataCleaningObservation,
     env_name="data_cleaning_env",
     max_concurrent_envs=10,
-    gradio_builder=lambda wm, af, meta, is_chat, title, qs_md: build_custom_ui(),
 )
 
+# ── Customise Swagger / OpenAPI docs ─────────────────────────────────────────
+app.title = "Data Cleaning Environment API"
+app.description = """
+# Data Cleaning Environment
 
-# --- Additional hackathon endpoints ---
+A real-world **OpenEnv** reinforcement learning environment where AI agents learn to clean messy tabular data.
 
-@app.get("/tasks")
+Built by **Team Devgods** for the Scaler x Meta PyTorch OpenEnv Hackathon 2026.
+
+---
+
+## Quick Start
+
+1. **Reset** an episode with a task:
+   ```
+   POST /reset  {"task_id": "easy_format_standardization"}
+   ```
+2. **Step** through actions:
+   ```
+   POST /step  {"action": {"action_type": "fix_field", "record_id": 1, "field_name": "email", "new_value": "john@gmail.com"}}
+   ```
+3. **Submit** when done:
+   ```
+   POST /step  {"action": {"action_type": "submit"}}
+   ```
+
+## Tasks
+
+| Task | Difficulty | Records | Issues | Budget |
+|------|-----------|---------|--------|--------|
+| `easy_format_standardization` | Easy | 5 | ~15 | 30 |
+| `medium_missing_and_typos` | Medium | 10 | ~31 | 60 |
+| `hard_full_pipeline` | Hard | 15 | ~45 | 100 |
+
+## Actions
+
+| Action | Required Parameters |
+|--------|-------------------|
+| `fix_field` | `record_id`, `field_name`, `new_value` |
+| `mark_duplicate` | `record_id`, `duplicate_of` |
+| `delete_record` | `record_id` |
+| `submit` | — |
+
+## Links
+
+- **Interactive UI**: [/web](/web)
+- **WebSocket**: `ws://host/ws` (persistent sessions)
+- **GitHub**: [OpenEnv Framework](https://github.com/meta-pytorch/OpenEnv)
+"""
+app.version = "1.0.0"
+app.openapi_tags = [
+    {"name": "Environment", "description": "Core reset / step / state operations"},
+    {"name": "Hackathon", "description": "Task listing, grader details, baseline runner"},
+    {"name": "Health", "description": "Service health checks"},
+]
+# Custom Swagger UI styling
+app.swagger_ui_parameters = {
+    "docExpansion": "list",
+    "defaultModelsExpandDepth": 0,
+    "syntaxHighlight.theme": "monokai",
+    "tryItOutEnabled": True,
+    "displayRequestDuration": True,
+    "filter": True,
+}
+
+
+# ── Mount our custom Gradio web UI at /web ───────────────────────────────────
+import gradio as gr
+from server.web_ui import build_custom_ui
+
+_gradio_blocks = build_custom_ui()
+app = gr.mount_gradio_app(app, _gradio_blocks, path="/web")
+
+
+# ── Additional hackathon endpoints ───────────────────────────────────────────
+
+@app.get("/tasks", tags=["Hackathon"])
 async def get_tasks():
     """Return list of tasks and the action schema."""
     tasks = []
@@ -93,9 +163,9 @@ async def get_tasks():
     }
 
 
-@app.get("/grader")
+@app.get("/grader", tags=["Hackathon"])
 async def get_grader():
-    """Return grader score after an episode is completed."""
+    """Return grader scoring criteria and weights."""
     return {
         "description": "Grader scores episodes from 0.0 to 1.0",
         "scoring": {
@@ -121,9 +191,9 @@ async def get_grader():
     }
 
 
-@app.post("/baseline")
+@app.post("/baseline", tags=["Hackathon"])
 async def run_baseline():
-    """Run baseline inference on all 3 tasks and return scores."""
+    """Run heuristic baseline inference on all 3 tasks and return scores."""
     from server.baseline_runner import run_baseline_all_tasks
     results = run_baseline_all_tasks()
     return {"baseline_scores": results}
