@@ -61,7 +61,7 @@ Built by **Team Devgods** for the Scaler x Meta PyTorch OpenEnv Hackathon 2026.
    ```
 2. **Step** through actions:
    ```
-   POST /step  {"action": {"action_type": "fix_field", "record_id": 1, "field_name": "email", "new_value": "john@gmail.com"}}
+   POST /step  {"action": {"action_type": "fix_field", "record_id": 1, "field_name": "email", "new_value": "rahul.sharma@gmail.com"}}
    ```
 3. **Submit** when done:
    ```

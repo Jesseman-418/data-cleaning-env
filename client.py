@@ -22,7 +22,7 @@ class DataCleaningEnv(
         ...         action_type="fix_field",
         ...         record_id=1,
         ...         field_name="email",
-        ...         new_value="john.smith@gmail.com"
+        ...         new_value="rahul.sharma@gmail.com"
         ...     ))
         ...     print(result.observation.last_action_result)
     """

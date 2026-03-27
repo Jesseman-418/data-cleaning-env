@@ -26,8 +26,8 @@ A **real-world** OpenEnv environment where AI agents learn to clean messy tabula
 Data cleaning is one of the most common, time-consuming tasks in any data pipeline. This environment simulates realistic data quality issues found in customer/contact databases:
 
 - **Format inconsistencies**: Dates in mixed formats (MM/DD/YYYY, DD.MM.YYYY, etc.), phone numbers without standard formatting, mixed-case emails
-- **Missing values**: Empty fields that can be inferred from context (e.g., city from zip code)
-- **Typos**: Misspelled state names ("Califronia"), company names ("Acme Corportation")
+- **Missing values**: Empty fields that can be inferred from context (e.g., city from pin code)
+- **Typos**: Misspelled state names ("Maharshtra"), company names ("Tata Consultany Services")
 - **Outliers**: Impossible dates (birth year 1820), invalid zip codes
 - **Duplicates**: Same person appearing multiple times with slight variations
 
@@ -82,7 +82,7 @@ Each record has fields: `id`, `name`, `email`, `phone`, `date_of_birth`, `city`,
 ### Task 2: Missing Values & Typo Correction (Medium)
 - **Records:** 10 | **Issues:** ~31 | **Action budget:** 60
 - **Goal:** Fill missing values, fix typos, standardize formats
-- **Challenge:** Requires contextual reasoning — inferring city from zip code, recognizing misspelled state names
+- **Challenge:** Requires contextual reasoning — inferring city from pin code, recognizing misspelled state names
 
 ### Task 3: Full Data Pipeline (Hard)
 - **Records:** 15 (including 3 duplicates) | **Issues:** ~45 | **Action budget:** 100
@@ -192,7 +192,7 @@ async def play_episode():
                 "action_type": "fix_field",
                 "record_id": 1,
                 "field_name": "email",
-                "new_value": "john.smith@gmail.com"
+                "new_value": "rahul.sharma@gmail.com"
             }
         }))
         resp = json.loads(await ws.recv())
@@ -270,16 +270,16 @@ $ python test_episode.py
 
 === RESET ===
 Task: easy_format_standardization, Records: 5, Issues: 15
-Record 1: {'id': 1, 'name': 'John Smith', 'email': 'JOHN.SMITH@gmail.com',
- 'phone': '555.123.4567', 'date_of_birth': '03/15/1990', 'city': 'New York',
- 'state': 'New York', 'zip_code': '10001', 'company': 'Acme Corporation'}
+Record 1: {'id': 1, 'name': 'Rahul Sharma', 'email': 'RAHUL.SHARMA@gmail.com',
+ 'phone': '982.314.5670', 'date_of_birth': '03/15/1990', 'city': 'Mumbai',
+ 'state': 'Maharashtra', 'zip_code': '400001', 'company': 'Tata Consultancy Services'}
 
 === FIX EMAIL ===
-Fixed record 1, field 'email': 'JOHN.SMITH@gmail.com' -> 'john.smith@gmail.com' (correct)
+Fixed record 1, field 'email': 'RAHUL.SHARMA@gmail.com' -> 'rahul.sharma@gmail.com' (correct)
 Score: 0.495, Reward: 0.1
 
 === FIX PHONE ===
-Fixed record 1, field 'phone': '555.123.4567' -> '555-123-4567' (correct)
+Fixed record 1, field 'phone': '982.314.5670' -> '982-314-5670' (correct)
 Score: 0.54
 
 === FIX DATE ===

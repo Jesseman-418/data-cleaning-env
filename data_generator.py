@@ -10,63 +10,63 @@ import random
 from typing import Dict, List, Tuple
 
 
-# Base clean records pool
+# Base clean records pool — Indian customer database
 CLEAN_RECORDS = [
-    {"id": 1, "name": "John Smith", "email": "john.smith@gmail.com", "phone": "555-123-4567", "date_of_birth": "1990-03-15", "city": "New York", "state": "New York", "zip_code": "10001", "company": "Acme Corporation"},
-    {"id": 2, "name": "Sarah Johnson", "email": "sarah.j@outlook.com", "phone": "555-234-5678", "date_of_birth": "1985-07-22", "city": "Los Angeles", "state": "California", "zip_code": "90001", "company": "TechStart Inc"},
-    {"id": 3, "name": "Michael Chen", "email": "mchen@yahoo.com", "phone": "555-345-6789", "date_of_birth": "1992-11-08", "city": "Chicago", "state": "Illinois", "zip_code": "60601", "company": "DataFlow Systems"},
-    {"id": 4, "name": "Emily Davis", "email": "emily.davis@hotmail.com", "phone": "555-456-7890", "date_of_birth": "1988-01-30", "city": "Houston", "state": "Texas", "zip_code": "77001", "company": "Green Energy Co"},
-    {"id": 5, "name": "Robert Wilson", "email": "rwilson@gmail.com", "phone": "555-567-8901", "date_of_birth": "1995-06-12", "city": "Phoenix", "state": "Arizona", "zip_code": "85001", "company": "Desert Solutions"},
-    {"id": 6, "name": "Lisa Anderson", "email": "lisa.anderson@gmail.com", "phone": "555-678-9012", "date_of_birth": "1991-09-25", "city": "Philadelphia", "state": "Pennsylvania", "zip_code": "19101", "company": "HealthFirst Medical"},
-    {"id": 7, "name": "David Martinez", "email": "dmartinez@outlook.com", "phone": "555-789-0123", "date_of_birth": "1987-04-18", "city": "San Antonio", "state": "Texas", "zip_code": "78201", "company": "BuildRight Construction"},
-    {"id": 8, "name": "Jennifer Brown", "email": "jbrown@yahoo.com", "phone": "555-890-1234", "date_of_birth": "1993-12-05", "city": "San Diego", "state": "California", "zip_code": "92101", "company": "Pacific Ventures"},
-    {"id": 9, "name": "James Taylor", "email": "jtaylor@gmail.com", "phone": "555-901-2345", "date_of_birth": "1989-08-14", "city": "Dallas", "state": "Texas", "zip_code": "75201", "company": "Lone Star Media"},
-    {"id": 10, "name": "Amanda White", "email": "awhite@hotmail.com", "phone": "555-012-3456", "date_of_birth": "1994-02-28", "city": "San Jose", "state": "California", "zip_code": "95101", "company": "Silicon Valley Apps"},
-    {"id": 11, "name": "Christopher Lee", "email": "clee@gmail.com", "phone": "555-111-2222", "date_of_birth": "1986-10-07", "city": "Austin", "state": "Texas", "zip_code": "73301", "company": "CodeCraft Labs"},
-    {"id": 12, "name": "Jessica Garcia", "email": "jgarcia@outlook.com", "phone": "555-222-3333", "date_of_birth": "1990-05-19", "city": "Jacksonville", "state": "Florida", "zip_code": "32099", "company": "Sunshine Marketing"},
-    {"id": 13, "name": "Daniel Robinson", "email": "drobinson@yahoo.com", "phone": "555-333-4444", "date_of_birth": "1983-07-31", "city": "Columbus", "state": "Ohio", "zip_code": "43085", "company": "Midwest Analytics"},
-    {"id": 14, "name": "Michelle Clark", "email": "mclark@gmail.com", "phone": "555-444-5555", "date_of_birth": "1996-03-10", "city": "Charlotte", "state": "North Carolina", "zip_code": "28201", "company": "Southern Logistics"},
-    {"id": 15, "name": "Kevin Thomas", "email": "kthomas@hotmail.com", "phone": "555-555-6666", "date_of_birth": "1991-11-22", "city": "San Francisco", "state": "California", "zip_code": "94101", "company": "Bay Area Consulting"},
-    {"id": 16, "name": "Rachel Moore", "email": "rmoore@gmail.com", "phone": "555-666-7777", "date_of_birth": "1988-09-03", "city": "Indianapolis", "state": "Indiana", "zip_code": "46201", "company": "Hoosier Health"},
-    {"id": 17, "name": "Brian Jackson", "email": "bjackson@outlook.com", "phone": "555-777-8888", "date_of_birth": "1984-06-15", "city": "Seattle", "state": "Washington", "zip_code": "98101", "company": "Rainy Day Software"},
-    {"id": 18, "name": "Stephanie Harris", "email": "sharris@yahoo.com", "phone": "555-888-9999", "date_of_birth": "1992-01-27", "city": "Denver", "state": "Colorado", "zip_code": "80201", "company": "Mountain View Labs"},
-    {"id": 19, "name": "Andrew Lewis", "email": "alewis@gmail.com", "phone": "555-999-0000", "date_of_birth": "1987-12-09", "city": "Nashville", "state": "Tennessee", "zip_code": "37201", "company": "Music City Media"},
-    {"id": 20, "name": "Laura Walker", "email": "lwalker@hotmail.com", "phone": "555-100-2000", "date_of_birth": "1995-04-21", "city": "Portland", "state": "Oregon", "zip_code": "97201", "company": "Evergreen Designs"},
+    {"id": 1, "name": "Rahul Sharma", "email": "rahul.sharma@gmail.com", "phone": "982-314-5670", "date_of_birth": "1990-03-15", "city": "Mumbai", "state": "Maharashtra", "zip_code": "400001", "company": "Tata Consultancy Services"},
+    {"id": 2, "name": "Priya Nair", "email": "priya.nair@outlook.com", "phone": "944-287-3456", "date_of_birth": "1985-07-22", "city": "Bangalore", "state": "Karnataka", "zip_code": "560001", "company": "Infosys Ltd"},
+    {"id": 3, "name": "Amit Patel", "email": "amit.patel@yahoo.com", "phone": "879-456-1230", "date_of_birth": "1992-11-08", "city": "Ahmedabad", "state": "Gujarat", "zip_code": "380001", "company": "Reliance Industries"},
+    {"id": 4, "name": "Sneha Iyer", "email": "sneha.iyer@hotmail.com", "phone": "900-712-8904", "date_of_birth": "1988-01-30", "city": "Chennai", "state": "Tamil Nadu", "zip_code": "600001", "company": "Zoho Corporation"},
+    {"id": 5, "name": "Vikram Reddy", "email": "vreddy@gmail.com", "phone": "863-509-4123", "date_of_birth": "1995-06-12", "city": "Hyderabad", "state": "Telangana", "zip_code": "500001", "company": "Cyient Ltd"},
+    {"id": 6, "name": "Ananya Deshmukh", "email": "ananya.d@gmail.com", "phone": "773-841-2056", "date_of_birth": "1991-09-25", "city": "Pune", "state": "Maharashtra", "zip_code": "411001", "company": "Persistent Systems"},
+    {"id": 7, "name": "Karthik Menon", "email": "kmenon@outlook.com", "phone": "948-623-7081", "date_of_birth": "1987-04-18", "city": "Kochi", "state": "Kerala", "zip_code": "682001", "company": "UST Global"},
+    {"id": 8, "name": "Divya Gupta", "email": "divya.g@yahoo.com", "phone": "981-035-6742", "date_of_birth": "1993-12-05", "city": "Delhi", "state": "Delhi", "zip_code": "110001", "company": "HCL Technologies"},
+    {"id": 9, "name": "Suresh Kumar", "email": "skumar@gmail.com", "phone": "701-894-5230", "date_of_birth": "1989-08-14", "city": "Jaipur", "state": "Rajasthan", "zip_code": "302001", "company": "Genpact"},
+    {"id": 10, "name": "Meera Joshi", "email": "meera.joshi@hotmail.com", "phone": "886-213-4790", "date_of_birth": "1994-02-28", "city": "Noida", "state": "Uttar Pradesh", "zip_code": "201301", "company": "Wipro Ltd"},
+    {"id": 11, "name": "Arjun Bhat", "email": "arjun.bhat@gmail.com", "phone": "934-175-8602", "date_of_birth": "1986-10-07", "city": "Mysore", "state": "Karnataka", "zip_code": "570001", "company": "Mindtree Ltd"},
+    {"id": 12, "name": "Lakshmi Rao", "email": "lrao@outlook.com", "phone": "809-362-1475", "date_of_birth": "1990-05-19", "city": "Visakhapatnam", "state": "Andhra Pradesh", "zip_code": "530001", "company": "Tech Mahindra"},
+    {"id": 13, "name": "Rajesh Pillai", "email": "rpillai@yahoo.com", "phone": "956-048-3291", "date_of_birth": "1983-07-31", "city": "Thiruvananthapuram", "state": "Kerala", "zip_code": "695001", "company": "IBS Software"},
+    {"id": 14, "name": "Nandini Singh", "email": "nsingh@gmail.com", "phone": "771-529-6843", "date_of_birth": "1996-03-10", "city": "Lucknow", "state": "Uttar Pradesh", "zip_code": "226001", "company": "Newgen Software"},
+    {"id": 15, "name": "Sanjay Verma", "email": "sverma@hotmail.com", "phone": "832-461-7908", "date_of_birth": "1991-11-22", "city": "Chandigarh", "state": "Punjab", "zip_code": "160001", "company": "Nagarro"},
+    {"id": 16, "name": "Pooja Kulkarni", "email": "pkulkarni@gmail.com", "phone": "902-783-5146", "date_of_birth": "1988-09-03", "city": "Nagpur", "state": "Maharashtra", "zip_code": "440001", "company": "KPIT Technologies"},
+    {"id": 17, "name": "Deepak Choudhary", "email": "dchoudhary@outlook.com", "phone": "814-690-2357", "date_of_birth": "1984-06-15", "city": "Kolkata", "state": "West Bengal", "zip_code": "700001", "company": "Cognizant"},
+    {"id": 18, "name": "Swati Mishra", "email": "smishra@yahoo.com", "phone": "936-127-8064", "date_of_birth": "1992-01-27", "city": "Bhopal", "state": "Madhya Pradesh", "zip_code": "462001", "company": "Mphasis Ltd"},
+    {"id": 19, "name": "Arun Natarajan", "email": "arun.n@gmail.com", "phone": "844-058-9316", "date_of_birth": "1987-12-09", "city": "Coimbatore", "state": "Tamil Nadu", "zip_code": "641001", "company": "Hexaware Technologies"},
+    {"id": 20, "name": "Kavitha Hegde", "email": "khegde@hotmail.com", "phone": "978-346-0152", "date_of_birth": "1995-04-21", "city": "Mangalore", "state": "Karnataka", "zip_code": "575001", "company": "Robosoft Technologies"},
 ]
 
-# State abbreviation mapping
+# State abbreviation mapping (Indian states)
 STATE_ABBREVS = {
-    "New York": "NY", "California": "CA", "Illinois": "IL", "Texas": "TX",
-    "Arizona": "AZ", "Pennsylvania": "PA", "Florida": "FL", "Ohio": "OH",
-    "North Carolina": "NC", "Indiana": "IN", "Washington": "WA",
-    "Colorado": "CO", "Tennessee": "TN", "Oregon": "OR",
+    "Maharashtra": "MH", "Karnataka": "KA", "Gujarat": "GJ", "Tamil Nadu": "TN",
+    "Telangana": "TS", "Kerala": "KL", "Delhi": "DL", "Rajasthan": "RJ",
+    "Uttar Pradesh": "UP", "Andhra Pradesh": "AP", "Punjab": "PB",
+    "West Bengal": "WB", "Madhya Pradesh": "MP",
 }
 
-# Common typos for states
+# Common typos for Indian states
 STATE_TYPOS = {
-    "California": ["Califronia", "Californa", "Calfornia"],
-    "Pennsylvania": ["Pensylvania", "Pennsylvnia", "Pennsilvania"],
-    "Illinois": ["Illionis", "Illinios", "Illnois"],
-    "Tennessee": ["Tennesee", "Tennesse", "Tenessee"],
-    "North Carolina": ["North Carolna", "Noth Carolina"],
-    "Indiana": ["Indana", "Indianna"],
-    "New York": ["New Yrok", "New Yok"],
-    "Texas": ["Texs", "Txas"],
-    "Florida": ["Flordia", "Florda"],
-    "Colorado": ["Colordo", "Colrado"],
+    "Maharashtra": ["Maharshtra", "Maharastra", "Maharashthra"],
+    "Karnataka": ["Karnatka", "Karntaka", "Karantaka"],
+    "Tamil Nadu": ["Tamil Naidu", "Tamilnadu", "Tamil Ndu"],
+    "Telangana": ["Telangna", "Telegana", "Telengana"],
+    "Kerala": ["Kerla", "Kerela", "Keralla"],
+    "Uttar Pradesh": ["Uttar Pradsh", "Utter Pradesh"],
+    "Rajasthan": ["Rajasthn", "Rajsthan"],
+    "Gujarat": ["Gujrat", "Gujerat"],
+    "Andhra Pradesh": ["Andhra Pradsh", "Andra Pradesh"],
+    "West Bengal": ["West Bangal", "West Bengel"],
 }
 
 COMPANY_TYPOS = {
-    "Acme Corporation": "Acme Corportation",
-    "TechStart Inc": "TechStart Ic",
-    "DataFlow Systems": "DataFow Systems",
-    "Green Energy Co": "Gren Energy Co",
-    "HealthFirst Medical": "HeathFirst Medical",
-    "Pacific Ventures": "Pacfic Ventures",
-    "Silicon Valley Apps": "Silcon Valley Apps",
-    "CodeCraft Labs": "CodCraft Labs",
-    "Sunshine Marketing": "Sunshin Marketing",
-    "Midwest Analytics": "Midwst Analytics",
+    "Tata Consultancy Services": "Tata Consultany Services",
+    "Infosys Ltd": "Infosys Ldt",
+    "Reliance Industries": "Reliance Industires",
+    "Zoho Corporation": "Zoho Corporaton",
+    "Persistent Systems": "Persistant Systems",
+    "HCL Technologies": "HCL Technolgies",
+    "Wipro Ltd": "Wipro Ldt",
+    "Mindtree Ltd": "Mindtree Ldt",
+    "Tech Mahindra": "Tech Mahinrda",
+    "Cognizant": "Cognizent",
 }
 
 
@@ -218,25 +218,25 @@ def generate_task_hard(seed: int = 42) -> Tuple[List[Dict], List[Dict], Dict]:
 
     dup1 = copy.deepcopy(records[0])
     dup1["id"] = 13
-    dup1["name"] = "Jon Smith"  # Typo in name
-    dup1["email"] = "johnsmith@gmail.com"  # Slightly different email
-    dup1["phone"] = "5551234567"  # Different format
+    dup1["name"] = "Rahul Shrma"  # Typo in name
+    dup1["email"] = "rahulsharma@gmail.com"  # Slightly different email
+    dup1["phone"] = "9823145670"  # Different format
     records.append(dup1)
     duplicates.append((13, 1))
 
     dup2 = copy.deepcopy(records[2])
     dup2["id"] = 14
-    dup2["name"] = "Michael Chen"
-    dup2["email"] = "michael.chen@yahoo.com"  # Different email
-    dup2["phone"] = "(555) 345-6789"  # Different format
-    dup2["city"] = "chicago"  # Lowercase
+    dup2["name"] = "Amit Patel"
+    dup2["email"] = "amitpatel@yahoo.com"  # Different email
+    dup2["phone"] = "(879) 456-1230"  # Different format
+    dup2["city"] = "ahmedabad"  # Lowercase
     records.append(dup2)
     duplicates.append((14, 3))
 
     dup3 = copy.deepcopy(records[4])
     dup3["id"] = 15
-    dup3["name"] = "Rob Wilson"  # Shortened name
-    dup3["email"] = "rwilson@gmail.com"
+    dup3["name"] = "Vikram R"  # Shortened name
+    dup3["email"] = "vreddy@gmail.com"
     dup3["date_of_birth"] = "06/12/1995"  # Different format
     records.append(dup3)
     duplicates.append((15, 5))

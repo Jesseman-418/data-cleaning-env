@@ -39,7 +39,7 @@ Rules:
 - Dates should be in YYYY-MM-DD format
 - Phone numbers should be in XXX-XXX-XXXX format
 - Emails should be lowercase
-- Fix typos in state names (use full state name, e.g., "California" not "CA")
+- Fix typos in state names (use full state name, e.g., "Maharashtra" not "MH")
 - Fix typos in company names
 - Fill in missing fields when you can infer the correct value
 - Identify and mark/delete duplicate records (same person, slightly different data)

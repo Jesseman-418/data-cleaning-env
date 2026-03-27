@@ -642,14 +642,14 @@ def run_rl_training_demo():
 
                 if skill_level > 0.45:
                     state = rec.get("state", "")
-                    STATE_FIXES = {"Califronia": "California", "Kalifornia": "California", "Texass": "Texas", "Tejas": "Texas", "Ilinois": "Illinois", "Ilinoise": "Illinois", "Floridia": "Florida", "Flordia": "Florida", "Washinton": "Washington", "Washignton": "Washington", "Massachusets": "Massachusetts", "Massachusettes": "Massachusetts", "Pensylvania": "Pennsylvania", "Pennsylvnia": "Pennsylvania", "Gorgia": "Georgia", "Gerogia": "Georgia", "Michgan": "Michigan", "Michagan": "Michigan", "Nrth Carolina": "North Carolina", "Noth Carolina": "North Carolina"}
+                    STATE_FIXES = {"Maharshtra": "Maharashtra", "Maharastra": "Maharashtra", "Maharashthra": "Maharashtra", "Karnatka": "Karnataka", "Karntaka": "Karnataka", "Karantaka": "Karnataka", "Tamil Naidu": "Tamil Nadu", "Tamilnadu": "Tamil Nadu", "Tamil Ndu": "Tamil Nadu", "Telangna": "Telangana", "Telegana": "Telangana", "Telengana": "Telangana", "Kerla": "Kerala", "Kerela": "Kerala", "Keralla": "Kerala", "Uttar Pradsh": "Uttar Pradesh", "Utter Pradesh": "Uttar Pradesh", "Rajasthn": "Rajasthan", "Rajsthan": "Rajasthan", "Gujrat": "Gujarat", "Gujerat": "Gujarat", "Andhra Pradsh": "Andhra Pradesh", "Andra Pradesh": "Andhra Pradesh", "West Bangal": "West Bengal", "West Bengel": "West Bengal"}
                     if state in STATE_FIXES:
                         obs = env.step(DataCleaningAction(action_type="fix_field", record_id=rid, field_name="state", new_value=STATE_FIXES[state]))
                         if obs.done: break
 
                 if skill_level > 0.6:
                     company = rec.get("company", "")
-                    COMPANY_FIXES = {"Acme Corportation": "Acme Corporation", "Acme Corp.": "Acme Corporation", "TechStart Inc": "TechStart Inc.", "TechStart inc": "TechStart Inc.", "Global Dynmics": "Global Dynamics", "Innovate Sollutions": "Innovate Solutions", "Brightwav Media": "Brightwave Media", "Brightwave Mdia": "Brightwave Media", "Nexus Systms": "Nexus Systems", "Quantm Analytics": "Quantum Analytics", "Quantum Anlytics": "Quantum Analytics", "Vertex Engneering": "Vertex Engineering", "Pinnacle Hldings": "Pinnacle Holdings", "Sapphire Vnetures": "Sapphire Ventures"}
+                    COMPANY_FIXES = {"Tata Consultany Services": "Tata Consultancy Services", "Infosys Ldt": "Infosys Ltd", "Reliance Industires": "Reliance Industries", "Zoho Corporaton": "Zoho Corporation", "Persistant Systems": "Persistent Systems", "HCL Technolgies": "HCL Technologies", "Wipro Ldt": "Wipro Ltd", "Mindtree Ldt": "Mindtree Ltd", "Tech Mahinrda": "Tech Mahindra", "Cognizent": "Cognizant"}
                     if company in COMPANY_FIXES:
                         obs = env.step(DataCleaningAction(action_type="fix_field", record_id=rid, field_name="company", new_value=COMPANY_FIXES[company]))
                         if obs.done: break
@@ -706,7 +706,7 @@ A <strong>real-world</strong> OpenEnv reinforcement learning environment where A
 </div>
 <div style="background: #fefce8; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 16px;">
 <div style="font-weight: 700; color: #854d0e; font-size: 0.82rem; margin-bottom: 4px;">Typos &amp; Misspellings</div>
-<div style="color: #713f12; font-size: 0.78rem; line-height: 1.5;">Misspelled state names ("Califronia"), company names ("Acme Corportation")</div>
+<div style="color: #713f12; font-size: 0.78rem; line-height: 1.5;">Misspelled state names ("Maharshtra"), company names ("Tata Consultany Services")</div>
 </div>
 <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px 16px;">
 <div style="font-weight: 700; color: #166534; font-size: 0.82rem; margin-bottom: 4px;">Outliers &amp; Anomalies</div>
@@ -718,7 +718,7 @@ A <strong>real-world</strong> OpenEnv reinforcement learning environment where A
 </div>
 <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 14px 16px;">
 <div style="font-weight: 700; color: #6b21a8; font-size: 0.82rem; margin-bottom: 4px;">Entity Resolution</div>
-<div style="color: #581c87; font-size: 0.78rem; line-height: 1.5;">"Jon Smith" at john.smith@gmail.com = "John Smith" at jsmith@gmail.com? Requires reasoning.</div>
+<div style="color: #581c87; font-size: 0.78rem; line-height: 1.5;">"Rahul Shrma" at rahulsharma@gmail.com = "Rahul Sharma" at rahul.sharma@gmail.com? Requires reasoning.</div>
 </div>
 </div>
 
@@ -880,7 +880,7 @@ with DataCleaningEnv(base_url="http://localhost:8000").sync() as env:
 // Step
 {"type": "step", "data": {"action_type": "fix_field",
  "record_id": 1, "field_name": "email",
- "new_value": "john@gmail.com"}}
+ "new_value": "rahul.sharma@gmail.com"}}
 
 // Submit
 {"type": "step", "data": {"action_type": "submit"}}
@@ -1222,8 +1222,8 @@ Final Score = (0.60 x Field Accuracy) + (0.25 x Dup Accuracy) + (0.10 x Efficien
 
 ## What Makes This Genuinely Hard
 
-1. **Entity Resolution** (Hard task) -- The agent must determine that "Jon Smith" at "john.smith@gmail.com"
-   and "John Smith" at "jsmith@gmail.com" are the same person. This challenges even frontier LLMs.
+1. **Entity Resolution** (Hard task) -- The agent must determine that "Rahul Shrma" at "rahulsharma@gmail.com"
+   and "Rahul Sharma" at "rahul.sharma@gmail.com" are the same person. This challenges even frontier LLMs.
 
 2. **Context-Dependent Fixes** (Medium+) -- Missing city values must be inferred from zip codes.
    Missing states from city names. Requires world knowledge.

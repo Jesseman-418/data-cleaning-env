@@ -133,7 +133,7 @@ async def test_websocket_episode(base, ws_scheme):
                     "action_type": "fix_field",
                     "record_id": 1,
                     "field_name": "email",
-                    "new_value": "john.smith@gmail.com",
+                    "new_value": "rahul.sharma@gmail.com",
                 },
             }))
             r = json.loads(await ws.recv())
@@ -148,7 +148,7 @@ async def test_websocket_episode(base, ws_scheme):
                     "action_type": "fix_field",
                     "record_id": 1,
                     "field_name": "phone",
-                    "new_value": "555-123-4567",
+                    "new_value": "982-314-5670",
                 },
             }))
             r = json.loads(await ws.recv())
@@ -178,7 +178,7 @@ async def test_websocket_episode(base, ws_scheme):
                     "action_type": "fix_field",
                     "record_id": 2,
                     "field_name": "email",
-                    "new_value": "sarah.j@outlook.com",
+                    "new_value": "priya.nair@outlook.com",
                 },
             }))
             r = json.loads(await ws.recv())
