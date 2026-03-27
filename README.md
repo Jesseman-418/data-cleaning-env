@@ -7,6 +7,8 @@ sdk: docker
 pinned: false
 app_port: 8000
 base_path: /web
+fullWidth: true
+short_description: RL environment for AI agents to learn data cleaning
 tags:
   - openenv
 ---
