@@ -111,12 +111,16 @@ app.swagger_ui_parameters = {
 _original_openapi = app.openapi
 
 def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
     schema = _original_openapi()
     schema["info"]["title"] = "Data Cleaning Environment API"
     schema["info"]["version"] = "1.0.0"
     schema["info"]["description"] = app.description
+    app.openapi_schema = schema
     return schema
 
+app.openapi_schema = None  # Clear any cached schema
 app.openapi = custom_openapi
 
 
