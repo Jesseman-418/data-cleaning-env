@@ -681,33 +681,83 @@ def run_rl_training_demo():
 README_MD = """
 <div class="docs-content">
 
-## Data Cleaning Environment
-
-A **real-world** OpenEnv reinforcement learning environment where AI agents learn to clean messy tabular data. The agent receives dirty customer records with formatting errors, missing values, typos, outliers, and duplicate entries -- and must fix them through a series of actions.
-
-**Why this matters:** Data cleaning consumes ~80% of data scientists' time. This environment provides a standardized benchmark for training and evaluating AI agents on this critical task.
+<div style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border: 1px solid #dbeafe; border-radius: 14px; padding: 28px 32px; margin-bottom: 28px;">
+<h2 style="margin: 0 0 8px 0; color: #1e293b; font-size: 1.5rem; font-weight: 800; border: none; padding: 0;">Data Cleaning Environment</h2>
+<p style="margin: 0 0 16px 0; color: #475569; font-size: 0.95rem; line-height: 1.6;">
+A <strong>real-world</strong> OpenEnv reinforcement learning environment where AI agents learn to clean messy tabular data &mdash; fix formatting, fill missing values, correct typos, and detect duplicates.
+</p>
+<p style="margin: 0; color: #64748b; font-size: 0.88rem;">
+<strong style="color: #dc2626;">Why this matters:</strong> Data cleaning consumes ~80% of data scientists' time. This environment provides a standardized benchmark for training and evaluating AI agents on this critical task.
+</p>
+</div>
 
 ---
 
-## Environment Description
+## Data Quality Issues Simulated
 
-This environment simulates realistic data quality issues found in customer/contact databases:
-
-- **Format inconsistencies** -- Dates in mixed formats (MM/DD/YYYY, DD.MM.YYYY), phone numbers without standard formatting, mixed-case emails
-- **Missing values** -- Empty fields that can be inferred from context (e.g., city from zip code)
-- **Typos** -- Misspelled state names ("Califronia"), company names ("Acme Corportation")
-- **Outliers** -- Impossible dates (birth year 1820), invalid zip codes
-- **Duplicates** -- Same person appearing multiple times with slight variations
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0 24px;">
+<div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #991b1b; font-size: 0.82rem; margin-bottom: 4px;">Format Inconsistencies</div>
+<div style="color: #7f1d1d; font-size: 0.78rem; line-height: 1.5;">Dates in mixed formats (MM/DD/YYYY, DD.MM.YYYY), phones without standard formatting, mixed-case emails</div>
+</div>
+<div style="background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #9a3412; font-size: 0.82rem; margin-bottom: 4px;">Missing Values</div>
+<div style="color: #7c2d12; font-size: 0.78rem; line-height: 1.5;">Empty fields that can be inferred from context (e.g., city from zip code, state from city)</div>
+</div>
+<div style="background: #fefce8; border: 1px solid #fde68a; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #854d0e; font-size: 0.82rem; margin-bottom: 4px;">Typos &amp; Misspellings</div>
+<div style="color: #713f12; font-size: 0.78rem; line-height: 1.5;">Misspelled state names ("Califronia"), company names ("Acme Corportation")</div>
+</div>
+<div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #166534; font-size: 0.82rem; margin-bottom: 4px;">Outliers &amp; Anomalies</div>
+<div style="color: #14532d; font-size: 0.78rem; line-height: 1.5;">Impossible dates (birth year 1820), invalid zip codes, out-of-range values</div>
+</div>
+<div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #1e40af; font-size: 0.82rem; margin-bottom: 4px;">Duplicate Records</div>
+<div style="color: #1e3a5f; font-size: 0.78rem; line-height: 1.5;">Same person appearing multiple times with slight variations in name, email, or phone</div>
+</div>
+<div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 14px 16px;">
+<div style="font-weight: 700; color: #6b21a8; font-size: 0.82rem; margin-bottom: 4px;">Entity Resolution</div>
+<div style="color: #581c87; font-size: 0.78rem; line-height: 1.5;">"Jon Smith" at john.smith@gmail.com = "John Smith" at jsmith@gmail.com? Requires reasoning.</div>
+</div>
+</div>
 
 ---
 
 ## Tasks
 
-| Task | Difficulty | Records | Issues | Budget | Challenge |
-|------|-----------|---------|--------|--------|-----------|
-| Format Standardization | Easy | 5 | ~15 | 30 | Dates, phones, emails |
-| Missing Values & Typos | Medium | 10 | ~31 | 60 | Context inference + typo correction |
-| Full Data Pipeline | Hard | 15 | ~45 | 100 | All above + duplicate detection |
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0 24px;">
+<div style="background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%); border: 1px solid #86efac; border-radius: 12px; padding: 20px; text-align: center;">
+<div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #16a34a; font-weight: 700; margin-bottom: 6px;">Easy</div>
+<div style="font-size: 1.05rem; font-weight: 800; color: #14532d; margin-bottom: 8px;">Format Standardization</div>
+<div style="display: flex; justify-content: center; gap: 16px; font-size: 0.78rem; color: #166534;">
+<span><strong>5</strong> records</span>
+<span><strong>~15</strong> issues</span>
+<span><strong>30</strong> budget</span>
+</div>
+<div style="margin-top: 10px; font-size: 0.75rem; color: #15803d; line-height: 1.45;">Dates, phones, emails &mdash; straightforward pattern matching</div>
+</div>
+<div style="background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid #fdba74; border-radius: 12px; padding: 20px; text-align: center;">
+<div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #ea580c; font-weight: 700; margin-bottom: 6px;">Medium</div>
+<div style="font-size: 1.05rem; font-weight: 800; color: #7c2d12; margin-bottom: 8px;">Missing Values &amp; Typos</div>
+<div style="display: flex; justify-content: center; gap: 16px; font-size: 0.78rem; color: #9a3412;">
+<span><strong>10</strong> records</span>
+<span><strong>~31</strong> issues</span>
+<span><strong>60</strong> budget</span>
+</div>
+<div style="margin-top: 10px; font-size: 0.75rem; color: #c2410c; line-height: 1.45;">Contextual reasoning &mdash; infer city from zip, recognize misspelled states</div>
+</div>
+<div style="background: linear-gradient(145deg, #fef2f2 0%, #fecaca 100%); border: 1px solid #f87171; border-radius: 12px; padding: 20px; text-align: center;">
+<div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: #dc2626; font-weight: 700; margin-bottom: 6px;">Hard</div>
+<div style="font-size: 1.05rem; font-weight: 800; color: #7f1d1d; margin-bottom: 8px;">Full Data Pipeline</div>
+<div style="display: flex; justify-content: center; gap: 16px; font-size: 0.78rem; color: #991b1b;">
+<span><strong>15</strong> records</span>
+<span><strong>~45</strong> issues</span>
+<span><strong>100</strong> budget</span>
+</div>
+<div style="margin-top: 10px; font-size: 0.75rem; color: #b91c1c; line-height: 1.45;">Everything above + duplicate detection &amp; entity resolution</div>
+</div>
+</div>
 
 ---
 
@@ -718,7 +768,7 @@ This environment simulates realistic data quality issues found in customer/conta
 | `fix_field` | `record_id`, `field_name`, `new_value` | Correct a specific field in a record |
 | `mark_duplicate` | `record_id`, `duplicate_of` | Flag two records as representing the same entity |
 | `delete_record` | `record_id` | Remove a record from the dataset |
-| `submit` | -- | Finalize cleaning and get graded |
+| `submit` | &mdash; | Finalize cleaning and get graded |
 
 ---
 
@@ -737,7 +787,7 @@ Each observation includes:
 | `actions_taken` | `int` | Actions used |
 | `max_actions` | `int` | Action budget |
 | `last_action_result` | `str` | Feedback from last action |
-| `current_score` | `float` | Running score (0.0-1.0) |
+| `current_score` | `float` | Running score (0.0&ndash;1.0) |
 
 Each record has fields: `id`, `name`, `email`, `phone`, `date_of_birth`, `city`, `state`, `zip_code`, `company`.
 
@@ -745,22 +795,39 @@ Each record has fields: `id`, `name`, `email`, `phone`, `date_of_birth`, `city`,
 
 ## Reward Function
 
-Dense rewards provide learning signal at every step:
-
-| Action | Reward |
-|--------|--------|
-| Correct field fix | +0.1 |
-| Incorrect field change | -0.05 |
-| Correct duplicate identification | +0.2 |
-| Incorrect duplicate marking | -0.1 |
-| Correct duplicate deletion | +0.15 |
-| Deleting non-duplicate | -0.15 |
-| Invalid action | -0.02 |
-| Submit (final score) | 0.0 -- 1.0 |
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin: 16px 0;">
+<div style="font-weight: 700; color: #1e293b; margin-bottom: 12px; font-size: 0.9rem;">Dense rewards provide learning signal at every step:</div>
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #f0fdf4; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #166534;">Correct field fix</span>
+<strong style="color: #16a34a;">+0.1</strong>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #fef2f2; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #991b1b;">Incorrect field change</span>
+<strong style="color: #dc2626;">&minus;0.05</strong>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #f0fdf4; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #166534;">Correct duplicate ID</span>
+<strong style="color: #16a34a;">+0.2</strong>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #fef2f2; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #991b1b;">Incorrect duplicate</span>
+<strong style="color: #dc2626;">&minus;0.1</strong>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #f0fdf4; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #166534;">Correct deletion</span>
+<strong style="color: #16a34a;">+0.15</strong>
+</div>
+<div style="display: flex; justify-content: space-between; padding: 6px 12px; background: #fef2f2; border-radius: 6px; font-size: 0.82rem;">
+<span style="color: #991b1b;">Deleting non-duplicate</span>
+<strong style="color: #dc2626;">&minus;0.15</strong>
+</div>
+</div>
+</div>
 
 **Final grading weights:**
-- **Easy/Medium:** Field accuracy (75%) + Efficiency (15%) + No false positives (10%)
-- **Hard:** Field accuracy (60%) + Duplicate detection (25%) + Efficiency (10%) + No false positives (5%)
+- **Easy/Medium:** Field accuracy (75%) + Efficiency (15%) &minus; False positive penalty (10%)
+- **Hard:** Field accuracy (60%) + Duplicate detection (25%) + Efficiency (10%) &minus; FP penalty (5%)
 
 ---
 
@@ -781,7 +848,7 @@ Dense rewards provide learning signal at every step:
 
 ---
 
-## Quick Start (Python)
+## Quick Start (Python Client)
 
 ```python
 from data_cleaning_env import DataCleaningEnv, DataCleaningAction
@@ -823,24 +890,96 @@ with DataCleaningEnv(base_url="http://localhost:8000").sync() as env:
 
 ## Baseline Scores
 
-| Agent | Easy | Medium | Hard |
-|-------|------|--------|------|
-| Random | ~0.10 | ~0.05 | ~0.03 |
-| Heuristic (regex) | **0.87** | **0.44** | **0.37** |
-| GPT-4o-mini | ~0.85 | ~0.70 | ~0.55 |
-| Frontier LLM | ~0.95 | ~0.85 | ~0.70 |
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin: 16px 0;">
+<table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+<thead>
+<tr style="border-bottom: 2px solid #e2e8f0;">
+<th style="text-align: left; padding: 8px 12px; color: #475569; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em;">Agent</th>
+<th style="text-align: center; padding: 8px 12px; color: #16a34a; font-size: 0.75rem; text-transform: uppercase;">Easy</th>
+<th style="text-align: center; padding: 8px 12px; color: #ea580c; font-size: 0.75rem; text-transform: uppercase;">Medium</th>
+<th style="text-align: center; padding: 8px 12px; color: #dc2626; font-size: 0.75rem; text-transform: uppercase;">Hard</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid #f1f5f9;">
+<td style="padding: 8px 12px; color: #94a3b8;">Random</td>
+<td style="text-align: center; padding: 8px 12px; color: #94a3b8;">~0.10</td>
+<td style="text-align: center; padding: 8px 12px; color: #94a3b8;">~0.05</td>
+<td style="text-align: center; padding: 8px 12px; color: #94a3b8;">~0.03</td>
+</tr>
+<tr style="border-bottom: 1px solid #f1f5f9;">
+<td style="padding: 8px 12px; font-weight: 600; color: #334155;">Heuristic (regex)</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #16a34a;">0.87</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #ea580c;">0.44</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #dc2626;">0.37</td>
+</tr>
+<tr style="border-bottom: 1px solid #f1f5f9;">
+<td style="padding: 8px 12px; color: #334155;">GPT-4o-mini</td>
+<td style="text-align: center; padding: 8px 12px;">~0.85</td>
+<td style="text-align: center; padding: 8px 12px;">~0.70</td>
+<td style="text-align: center; padding: 8px 12px;">~0.55</td>
+</tr>
+<tr>
+<td style="padding: 8px 12px; font-weight: 600; color: #1e293b;">Frontier LLM</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #16a34a;">~0.95</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #ea580c;">~0.85</td>
+<td style="text-align: center; padding: 8px 12px; font-weight: 700; color: #dc2626;">~0.70</td>
+</tr>
+</tbody>
+</table>
+<p style="margin: 12px 0 0; font-size: 0.8rem; color: #64748b; font-style: italic;">
+The gap between heuristic and frontier LLM on Hard demonstrates this environment <strong>genuinely requires AI reasoning</strong> &mdash; not just pattern matching.
+</p>
+</div>
 
 ---
 
 ## What Makes This Environment Unique
 
-1. **Real-world task** -- Data cleaning is a genuine industry problem, not a toy game
-2. **Dense reward signal** -- Every action gets immediate feedback, enabling effective RL training
-3. **Progressive difficulty** -- Easy (regex) to Medium (reasoning) to Hard (entity resolution)
-4. **Multi-dimensional grading** -- Accuracy + efficiency + false positive penalty
-5. **Deterministic generation** -- Seeded data for reproducible benchmarking
-6. **Interactive demo** -- Try it directly in the Playground tab
-7. **RL training curves** -- See progressive skill acquisition in Baselines & Training tab
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 16px 0;">
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #dbeafe; color: #2563eb; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">1</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Real-World Task</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Data cleaning is a genuine industry problem, not a toy game</div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #d1fae5; color: #059669; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">2</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Dense Reward Signal</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Every action gets immediate feedback, enabling effective RL training</div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #fef3c7; color: #d97706; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">3</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Progressive Difficulty</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Easy (regex) &rarr; Medium (reasoning) &rarr; Hard (entity resolution)</div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #fce7f3; color: #db2777; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">4</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Multi-Dimensional Grading</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Accuracy + efficiency + false positive penalty rewards careful agents</div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #ede9fe; color: #7c3aed; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">5</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Deterministic Generation</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Seeded data allows reproducible benchmarking across runs</div>
+</div>
+</div>
+<div style="display: flex; gap: 12px; align-items: flex-start; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 16px;">
+<div style="background: #cffafe; color: #0891b2; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0;">6</div>
+<div>
+<div style="font-weight: 700; color: #1e293b; font-size: 0.85rem;">Interactive Demo + RL Curves</div>
+<div style="font-size: 0.78rem; color: #64748b; line-height: 1.4;">Play in the Playground tab, watch training curves in Baselines tab</div>
+</div>
+</div>
+</div>
 
 ---
 
@@ -864,13 +1003,15 @@ data_cleaning_env/
 
 ---
 
-## Authors
-
-**Team Devgods** -- Scaler x Meta PyTorch OpenEnv Hackathon 2026
-
-- **Jesseman Devamirtham N** (Team Lead)
-- **Karen Infanta Rozario**
-- **Janani S**
+<div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 12px; padding: 24px 28px; text-align: center; color: #fff;">
+<div style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">Team Devgods</div>
+<div style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 12px;">Scaler &times; Meta PyTorch OpenEnv Hackathon 2026</div>
+<div style="display: flex; justify-content: center; gap: 24px; font-size: 0.85rem;">
+<span><strong>Jesseman Devamirtham N</strong> <span style="opacity: 0.5;">(Lead)</span></span>
+<span><strong>Karen Infanta Rozario</strong></span>
+<span><strong>Janani S</strong></span>
+</div>
+</div>
 
 </div>
 """
