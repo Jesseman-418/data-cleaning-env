@@ -107,21 +107,20 @@ app.swagger_ui_parameters = {
     "filter": True,
 }
 
-# Override OpenAPI schema to inject our custom title/description
-_original_openapi = app.openapi
+# Override OpenAPI schema — must patch after all routes are registered
+from fastapi.responses import JSONResponse
 
-def custom_openapi():
-    if app.openapi_schema:
-        return app.openapi_schema
-    schema = _original_openapi()
-    schema["info"]["title"] = "Data Cleaning Environment API"
-    schema["info"]["version"] = "1.0.0"
-    schema["info"]["description"] = app.description
-    app.openapi_schema = schema
-    return schema
-
-app.openapi_schema = None  # Clear any cached schema
-app.openapi = custom_openapi
+@app.get("/openapi.json", include_in_schema=False)
+async def custom_openapi_json():
+    """Serve customised OpenAPI schema with our title and description."""
+    from fastapi.openapi.utils import get_openapi
+    schema = get_openapi(
+        title="Data Cleaning Environment API",
+        version="1.0.0",
+        description=app.description,
+        routes=app.routes,
+    )
+    return JSONResponse(schema)
 
 
 # ── Mount our custom Gradio web UI at /web ───────────────────────────────────
