@@ -40,17 +40,19 @@ _score_history = []
 
 CUSTOM_CSS = """
 /* ── Typography & Global ────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 .gradio-container {
-    max-width: 1320px !important;
+    max-width: 1400px !important;
     margin: 0 auto !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
 }
 
 /* ── Header banner ──────────────────────────────────────────── */
 .header-banner {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0f3460 100%);
-    border-radius: 14px;
-    padding: 32px 36px 28px;
-    margin-bottom: 8px;
+    background: linear-gradient(135deg, #0a0f1a 0%, #111827 30%, #1a1f3a 60%, #0f2440 100%);
+    border-radius: 16px;
+    padding: 40px 44px 32px;
+    margin-bottom: 12px;
     color: #fff;
     border: 1px solid rgba(255,255,255,0.06);
     position: relative;
@@ -59,50 +61,145 @@ CUSTOM_CSS = """
 .header-banner::before {
     content: '';
     position: absolute;
-    top: -40%;
-    right: -10%;
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    top: -60%;
+    right: -15%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, rgba(59,130,246,0.08) 30%, transparent 70%);
     border-radius: 50%;
+    animation: float 8s ease-in-out infinite;
+}
+.header-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 10s ease-in-out infinite reverse;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.05); }
 }
 .header-banner h1 {
-    margin: 0 0 8px 0;
-    font-size: 1.85rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
+    margin: 0 0 6px 0;
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: -0.04em;
     position: relative;
+    background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 .header-banner .subtitle {
-    margin: 0 0 14px 0;
-    opacity: 0.78;
+    margin: 0 0 18px 0;
+    opacity: 0.72;
     font-size: 0.95rem;
-    line-height: 1.55;
-    max-width: 680px;
+    line-height: 1.6;
+    max-width: 720px;
     position: relative;
+    font-weight: 400;
 }
 .header-badges {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
     position: relative;
+    margin-bottom: 16px;
 }
 .badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 6px;
-    padding: 4px 12px;
-    font-size: 0.74rem;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+.badge:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
 }
 .badge-accent {
-    background: rgba(59,130,246,0.2);
-    border-color: rgba(59,130,246,0.35);
+    background: rgba(99,102,241,0.2);
+    border-color: rgba(99,102,241,0.4);
+    color: #c7d2fe;
+}
+.badge-green {
+    background: rgba(16,185,129,0.15);
+    border-color: rgba(16,185,129,0.3);
+    color: #a7f3d0;
+}
+.header-links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    position: relative;
+}
+.header-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 7px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+}
+.header-link:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-1px);
+    color: #fff;
+}
+.header-link svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* ── Stats row in header ──────────────────────────────────── */
+.header-stats {
+    display: flex;
+    gap: 28px;
+    margin: 18px 0 20px;
+    position: relative;
+}
+.header-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.header-stat .hs-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.header-stat .hs-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.45);
+    font-weight: 600;
 }
 
 /* ── Metric cards ───────────────────────────────────────────── */
@@ -115,33 +212,49 @@ CUSTOM_CSS = """
 .metric-card {
     background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 18px 20px 14px;
+    border-radius: 14px;
+    padding: 20px 22px 16px;
     text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent, #3b82f6), var(--accent-end, #6366f1));
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 .metric-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03);
+}
+.metric-card:hover::before {
+    opacity: 1;
 }
 .metric-card .label {
-    margin: 0 0 4px 0;
-    font-size: 0.68rem;
+    margin: 0 0 6px 0;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     color: #64748b;
     font-weight: 700;
 }
 .metric-card .value {
-    font-size: 1.75rem;
+    font-size: 1.85rem;
     font-weight: 800;
-    color: #1e293b;
+    color: #0f172a;
     line-height: 1.15;
     font-variant-numeric: tabular-nums;
 }
 .metric-card .sub {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: #94a3b8;
     font-weight: 500;
 }
@@ -157,96 +270,183 @@ CUSTOM_CSS = """
 .score-bar-fill {
     height: 100%;
     border-radius: 3px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Status ─────────────────────────────────────────────────── */
 .status-msg {
-    background: #f8fafc;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border: 1px solid #e2e8f0;
-    border-left: 3px solid #3b82f6;
-    border-radius: 0 8px 8px 0;
-    padding: 10px 16px;
+    border-left: 4px solid #6366f1;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 18px;
     font-size: 0.88rem;
     color: #334155;
 }
 
 /* ── Section titles ─────────────────────────────────────────── */
 .section-title {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     color: #475569;
-    margin: 0 0 8px 0;
-    padding-bottom: 6px;
+    margin: 0 0 10px 0;
+    padding-bottom: 8px;
     border-bottom: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 /* ── Action log ─────────────────────────────────────────────── */
 .action-log textarea {
     font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace !important;
-    font-size: 0.8rem !important;
-    line-height: 1.65 !important;
+    font-size: 0.78rem !important;
+    line-height: 1.7 !important;
     background: #f8fafc !important;
     border-color: #e2e8f0 !important;
+    border-radius: 10px !important;
 }
 
 /* ── Data table ─────────────────────────────────────────────── */
 .data-table table {
     font-size: 0.82rem !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
 }
 .data-table th {
     background: #f1f5f9 !important;
     font-weight: 700 !important;
     text-transform: uppercase !important;
-    font-size: 0.72rem !important;
-    letter-spacing: 0.05em !important;
+    font-size: 0.7rem !important;
+    letter-spacing: 0.06em !important;
     color: #475569 !important;
+    padding: 10px 12px !important;
+}
+.data-table td {
+    padding: 8px 12px !important;
 }
 
 /* ── Buttons ────────────────────────────────────────────────── */
 .action-btn {
-    border-radius: 8px !important;
+    border-radius: 10px !important;
     font-weight: 600 !important;
     font-size: 0.85rem !important;
+    transition: all 0.2s ease !important;
+}
+.action-btn:hover {
+    transform: translateY(-1px) !important;
 }
 
 /* ── Docs section ───────────────────────────────────────────── */
 .docs-content {
-    max-width: 860px;
+    max-width: 880px;
 }
 .docs-content h2 {
-    color: #1e293b;
+    color: #0f172a;
     border-bottom: 2px solid #e2e8f0;
-    padding-bottom: 8px;
-    margin-top: 28px;
+    padding-bottom: 10px;
+    margin-top: 32px;
+    font-weight: 800;
+}
+.docs-content h3 {
+    color: #1e293b;
+    margin-top: 24px;
 }
 .docs-content table {
     font-size: 0.88rem;
 }
 .docs-content code {
     background: #f1f5f9;
-    padding: 1px 5px;
-    border-radius: 4px;
+    padding: 2px 7px;
+    border-radius: 5px;
     font-size: 0.85em;
+    font-family: 'JetBrains Mono', monospace;
 }
 .docs-content pre {
     background: #0f172a !important;
-    border-radius: 8px;
-    padding: 16px !important;
+    border-radius: 10px;
+    padding: 18px !important;
+    border: 1px solid #1e293b;
+}
+
+/* ── How it works cards ────────────────────────────────────── */
+.how-it-works {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 16px 0;
+}
+.hiw-card {
+    background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px 18px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.hiw-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+.hiw-step {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+.hiw-step-1 { background: #dbeafe; color: #2563eb; }
+.hiw-step-2 { background: #fce7f3; color: #db2777; }
+.hiw-step-3 { background: #d1fae5; color: #059669; }
+.hiw-step-4 { background: #fef3c7; color: #d97706; }
+.hiw-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+.hiw-desc {
+    font-size: 0.73rem;
+    color: #64748b;
+    line-height: 1.45;
 }
 
 /* ── Footer ─────────────────────────────────────────────────── */
 .footer {
     text-align: center;
-    padding: 24px 16px;
+    padding: 28px 16px;
     color: #94a3b8;
     font-size: 0.82rem;
     border-top: 1px solid #e2e8f0;
-    margin-top: 20px;
+    margin-top: 24px;
+    background: linear-gradient(180deg, transparent 0%, #f8fafc 100%);
 }
-.footer strong { color: #64748b; }
+.footer strong { color: #475569; }
+.footer-tech {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+.footer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #475569;
+}
 """
 
 
@@ -286,26 +486,28 @@ def _metrics_html(obs):
     else:
         color = "#ef4444"
 
+    eff_color = "#22c55e" if eff >= 70 else "#f59e0b" if eff >= 40 else "#ef4444"
+
     return f"""
 <div class="metric-row">
-  <div class="metric-card">
+  <div class="metric-card" style="--accent: {color}; --accent-end: {color}">
     <div class="label">Score</div>
     <div class="value" style="color:{color}">{score:.4f}</div>
     <div class="score-bar-wrap">
-      <div class="score-bar-fill" style="width:{pct}%; background:linear-gradient(90deg, {color}, {color}dd)"></div>
+      <div class="score-bar-fill" style="width:{pct}%; background:linear-gradient(90deg, {color}, {color}cc)"></div>
     </div>
   </div>
-  <div class="metric-card">
+  <div class="metric-card" style="--accent: #6366f1; --accent-end: #8b5cf6">
     <div class="label">Issues Fixed</div>
-    <div class="value">{issues}<span class="sub">/{total}</span></div>
+    <div class="value" style="color:#6366f1">{issues}<span class="sub">/{total}</span></div>
   </div>
-  <div class="metric-card">
+  <div class="metric-card" style="--accent: #3b82f6; --accent-end: #06b6d4">
     <div class="label">Actions Used</div>
-    <div class="value">{actions}<span class="sub">/{max_act}</span></div>
+    <div class="value" style="color:#3b82f6">{actions}<span class="sub">/{max_act}</span></div>
   </div>
-  <div class="metric-card">
+  <div class="metric-card" style="--accent: {eff_color}; --accent-end: {eff_color}">
     <div class="label">Efficiency</div>
-    <div class="value">{eff:.0f}<span class="sub">%</span></div>
+    <div class="value" style="color:{eff_color}">{eff:.0f}<span class="sub">%</span></div>
   </div>
 </div>
 """
@@ -689,13 +891,71 @@ def build_custom_ui():
             <h1>Data Cleaning Environment</h1>
             <p class="subtitle">
                 A real-world OpenEnv reinforcement learning environment where AI agents learn to clean
-                messy tabular data -- fix formatting, fill missing values, correct typos, and detect duplicates.
+                messy tabular data &mdash; fix formatting, fill missing values, correct typos, and detect duplicates.
             </p>
             <div class="header-badges">
                 <span class="badge badge-accent">OpenEnv</span>
-                <span class="badge">Meta PyTorch Hackathon 2026</span>
+                <span class="badge badge-green">Scaler &times; Meta PyTorch Hackathon 2026</span>
                 <span class="badge">Team Devgods</span>
-                <span class="badge">3 Tasks &bull; Dense Rewards &bull; 0.0-1.0 Grading</span>
+            </div>
+            <div class="header-stats">
+                <div class="header-stat">
+                    <span class="hs-value">3</span>
+                    <span class="hs-label">Tasks</span>
+                </div>
+                <div class="header-stat">
+                    <span class="hs-value">4</span>
+                    <span class="hs-label">Actions</span>
+                </div>
+                <div class="header-stat">
+                    <span class="hs-value">Dense</span>
+                    <span class="hs-label">Rewards</span>
+                </div>
+                <div class="header-stat">
+                    <span class="hs-value">0-1</span>
+                    <span class="hs-label">Grading</span>
+                </div>
+            </div>
+            <div class="header-links">
+                <a class="header-link" href="/docs" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    API Docs (Swagger)
+                </a>
+                <a class="header-link" href="/tasks" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    Tasks &amp; Schema
+                </a>
+                <a class="header-link" href="/grader" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    Grading Criteria
+                </a>
+                <a class="header-link" href="/health" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    Health Check
+                </a>
+            </div>
+        </div>
+
+        <div class="how-it-works">
+            <div class="hiw-card">
+                <div class="hiw-step hiw-step-1">1</div>
+                <div class="hiw-title">Reset</div>
+                <div class="hiw-desc">Choose a task &amp; load dirty data records</div>
+            </div>
+            <div class="hiw-card">
+                <div class="hiw-step hiw-step-2">2</div>
+                <div class="hiw-title">Clean</div>
+                <div class="hiw-desc">Fix fields, mark duplicates, delete bad records</div>
+            </div>
+            <div class="hiw-card">
+                <div class="hiw-step hiw-step-3">3</div>
+                <div class="hiw-title">Submit</div>
+                <div class="hiw-desc">Finalize and get graded on a 0.0&ndash;1.0 scale</div>
+            </div>
+            <div class="hiw-card">
+                <div class="hiw-step hiw-step-4">4</div>
+                <div class="hiw-title">Learn</div>
+                <div class="hiw-desc">Dense rewards guide the agent to improve</div>
             </div>
         </div>
         """)
@@ -852,11 +1112,16 @@ The gap between heuristic and frontier LLM on Hard demonstrates this environment
         # ── Footer ───────────────────────────────────────────────────
         gr.HTML("""
         <div class="footer">
-            <strong>Team Devgods</strong> -- Scaler x Meta PyTorch OpenEnv Hackathon 2026<br/>
-            Jesseman Devamirtham N (Lead) &bull; Karen Infanta Rozario &bull; Janani S<br/>
-            <span style="font-size:0.75rem; margin-top:4px; display:inline-block;">
-                Built with OpenEnv &bull; FastAPI &bull; Gradio &bull; Deployed on HuggingFace Spaces
-            </span>
+            <strong>Team Devgods</strong> &mdash; Scaler &times; Meta PyTorch OpenEnv Hackathon 2026<br/>
+            Jesseman Devamirtham N (Lead) &bull; Karen Infanta Rozario &bull; Janani S
+            <div class="footer-tech">
+                <span class="footer-badge">OpenEnv</span>
+                <span class="footer-badge">FastAPI</span>
+                <span class="footer-badge">Gradio</span>
+                <span class="footer-badge">Pydantic</span>
+                <span class="footer-badge">Docker</span>
+                <span class="footer-badge">HuggingFace Spaces</span>
+            </div>
         </div>
         """)
 
