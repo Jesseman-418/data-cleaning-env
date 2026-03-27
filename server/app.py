@@ -5,9 +5,13 @@ Exposes the standard OpenEnv endpoints plus hackathon-required:
   - GET /tasks: List tasks and action schema
   - POST /baseline: Run baseline inference and return scores
   - GET /grader: Return grader score after episode completion
+  - GET /web: Professional interactive web interface
 """
 
 import os
+
+# Enable the web interface
+os.environ["ENABLE_WEB_INTERFACE"] = "true"
 
 try:
     from openenv.core.env_server.http_server import create_app
@@ -17,26 +21,28 @@ except Exception as e:
     ) from e
 
 import sys
-import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 try:
     from models import DataCleaningAction, DataCleaningObservation
     from server.data_cleaning_env_environment import DataCleaningEnvironment
     from data_generator import TASKS
+    from server.web_ui import build_custom_ui
 except ImportError:
     from ..models import DataCleaningAction, DataCleaningObservation
     from .data_cleaning_env_environment import DataCleaningEnvironment
     from ..data_generator import TASKS
+    from .web_ui import build_custom_ui
 
 
-# Create the base OpenEnv app
+# Create the base OpenEnv app with custom Gradio UI
 app = create_app(
     DataCleaningEnvironment,
     DataCleaningAction,
     DataCleaningObservation,
     env_name="data_cleaning_env",
     max_concurrent_envs=10,
+    gradio_builder=lambda wm, af, meta, is_chat, title, qs_md: build_custom_ui(),
 )
 
 
@@ -90,8 +96,6 @@ async def get_tasks():
 @app.get("/grader")
 async def get_grader():
     """Return grader score after an episode is completed."""
-    # Try to get the last grade from the environment
-    # Since environments are per-session, this returns a template
     return {
         "description": "Grader scores episodes from 0.0 to 1.0",
         "scoring": {
