@@ -29,7 +29,8 @@ from openai import OpenAI
 
 API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o-mini")
-API_KEY = os.environ.get("HF_TOKEN", os.environ.get("OPENAI_API_KEY", ""))
+HF_TOKEN = os.environ.get("HF_TOKEN")
+API_KEY = HF_TOKEN
 
 # ── Environment Configuration ───────────────────────────────────────────────
 
