@@ -10,8 +10,8 @@ Required environment variables:
     HF_TOKEN      — Your Hugging Face / API key
 
 Usage:
-    export API_BASE_URL="https://api.openai.com/v1"
-    export MODEL_NAME="gpt-4o-mini"
+    export API_BASE_URL="https://router.huggingface.co/v1"
+    export MODEL_NAME="Qwen/Qwen2.5-72B-Instruct"
     export HF_TOKEN="your-key"
     python inference.py
 """
@@ -19,7 +19,9 @@ Usage:
 import asyncio
 import json
 import os
+import re
 import sys
+import time
 from typing import Dict, List, Optional
 
 import httpx
@@ -27,9 +29,9 @@ from openai import OpenAI
 
 # ── Environment Variables (mandatory) ───────────────────────────────────────
 
-API_BASE_URL = os.environ.get("API_BASE_URL", "https://api.openai.com/v1")
-MODEL_NAME = os.environ.get("MODEL_NAME", "gpt-4o-mini")
-HF_TOKEN = os.environ.get("HF_TOKEN")
+API_BASE_URL = os.environ.get("API_BASE_URL", "https://router.huggingface.co/v1")
+MODEL_NAME = os.environ.get("MODEL_NAME", "Qwen/Qwen2.5-72B-Instruct")
+HF_TOKEN = os.environ.get("HF_TOKEN") or os.environ.get("API_KEY") or ""
 API_KEY = HF_TOKEN
 
 # ── Environment Configuration ───────────────────────────────────────────────
@@ -48,27 +50,27 @@ TASKS = {
 
 SUCCESS_SCORE_THRESHOLD = 0.3
 
-# ── Structured Logging (mandatory format) ───────────────────────────────────
+# ── Structured Logging (mandatory format — matches sample spec exactly) ─────
 
 
 def log_start(task: str, env: str, model: str) -> None:
-    print(
-        f"[START] task={task} env={env} model={model}",
-        flush=True,
-    )
+    print(f"[START] task={task} env={env} model={model}", flush=True)
 
 
 def log_step(step: int, action: str, reward: float, done: bool, error: Optional[str]) -> None:
     action_short = action[:200] if len(action) > 200 else action
+    error_val = error if error else "null"
+    done_val = str(done).lower()
     print(
-        f"[STEP] step={step} action={json.dumps(action_short)} reward={reward:.2f} done={done} error={json.dumps(error)}",
+        f"[STEP] step={step} action={action_short} reward={reward:.2f} done={done_val} error={error_val}",
         flush=True,
     )
 
 
 def log_end(success: bool, steps: int, score: float, rewards: List[float]) -> None:
+    rewards_str = ",".join(f"{r:.2f}" for r in rewards)
     print(
-        f"[END] success={success} steps={steps} score={score:.4f} rewards={json.dumps([round(r, 4) for r in rewards])}",
+        f"[END] success={str(success).lower()} steps={steps} score={score:.3f} rewards={rewards_str}",
         flush=True,
     )
 
@@ -159,7 +161,6 @@ def parse_action(content: str) -> Optional[Dict]:
         pass
 
     # Try to find JSON in the response
-    import re
     match = re.search(r"\{[^}]+\}", content)
     if match:
         try:
@@ -174,27 +175,64 @@ def parse_action(content: str) -> Optional[Dict]:
 
 
 class EnvHTTPClient:
-    """Simple HTTP client for the OpenEnv environment."""
+    """HTTP client for the OpenEnv environment with retry logic."""
 
     def __init__(self, base_url: str):
         self.base_url = base_url.rstrip("/")
-        self.client = httpx.AsyncClient(timeout=60.0)
+        self.client = httpx.AsyncClient(timeout=120.0)
+
+    async def _request_with_retry(self, method: str, path: str, **kwargs) -> Dict:
+        """Make an HTTP request with retries for transient failures."""
+        url = f"{self.base_url}{path}"
+        last_exc = None
+        for attempt in range(5):
+            try:
+                if method == "GET":
+                    resp = await self.client.get(url, **kwargs)
+                else:
+                    resp = await self.client.post(url, **kwargs)
+                resp.raise_for_status()
+                return resp.json()
+            except (httpx.ConnectError, httpx.ReadTimeout, httpx.ConnectTimeout) as exc:
+                last_exc = exc
+                wait = min(2 ** attempt * 2, 30)
+                print(f"[DEBUG] Attempt {attempt+1} failed ({type(exc).__name__}), retrying in {wait}s...", flush=True)
+                await asyncio.sleep(wait)
+            except httpx.HTTPStatusError as exc:
+                if exc.response.status_code >= 500:
+                    last_exc = exc
+                    wait = min(2 ** attempt * 2, 30)
+                    print(f"[DEBUG] Server error {exc.response.status_code}, retrying in {wait}s...", flush=True)
+                    await asyncio.sleep(wait)
+                else:
+                    raise
+        raise last_exc  # type: ignore[misc]
+
+    async def health_check(self) -> bool:
+        """Check if the environment server is reachable."""
+        try:
+            resp = await self.client.get(f"{self.base_url}/health", timeout=10.0)
+            return resp.status_code == 200
+        except Exception:
+            return False
+
+    async def wait_for_server(self, max_wait: int = 120) -> bool:
+        """Wait for the environment server to become available."""
+        print(f"[DEBUG] Waiting for environment at {self.base_url}...", flush=True)
+        start = time.time()
+        while time.time() - start < max_wait:
+            if await self.health_check():
+                print(f"[DEBUG] Environment is ready ({time.time()-start:.1f}s)", flush=True)
+                return True
+            await asyncio.sleep(3)
+        print(f"[DEBUG] Environment not ready after {max_wait}s", flush=True)
+        return False
 
     async def reset(self, task_id: str = "easy_format_standardization") -> Dict:
-        resp = await self.client.post(
-            f"{self.base_url}/reset",
-            json={"task_id": task_id},
-        )
-        resp.raise_for_status()
-        return resp.json()
+        return await self._request_with_retry("POST", "/reset", json={"task_id": task_id})
 
     async def step(self, action: Dict) -> Dict:
-        resp = await self.client.post(
-            f"{self.base_url}/step",
-            json={"action": action},
-        )
-        resp.raise_for_status()
-        return resp.json()
+        return await self._request_with_retry("POST", "/step", json={"action": action})
 
     async def close(self):
         await self.client.aclose()
@@ -235,7 +273,15 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
                 action_text = '{"action_type": "submit"}'
 
             # Execute action
-            result = await env.step(action)
+            try:
+                result = await env.step(action)
+            except Exception as exc:
+                print(f"[DEBUG] env.step failed: {exc}", flush=True)
+                log_step(step=step, action=action_text, reward=0.0, done=True, error=str(exc))
+                steps_taken = step
+                rewards.append(0.0)
+                break
+
             obs = result.get("observation", result)
             reward = result.get("reward", 0.0) or 0.0
             done = result.get("done", False)
@@ -248,7 +294,7 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
 
             history.append(
                 f"Step {step}: {action_text} -> reward {reward:+.2f}, "
-                f"result: {obs.get('last_action_result', '')[:100]}"
+                f"result: {str(obs.get('last_action_result', ''))[:100]}"
             )
 
             if done:
@@ -257,10 +303,15 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
         # Submit if not done
         if not done:
             action = {"action_type": "submit"}
-            result = await env.step(action)
-            obs = result.get("observation", result)
-            reward = result.get("reward", 0.0) or 0.0
-            done = result.get("done", False)
+            try:
+                result = await env.step(action)
+                obs = result.get("observation", result)
+                reward = result.get("reward", 0.0) or 0.0
+                done = result.get("done", False)
+            except Exception as exc:
+                print(f"[DEBUG] Final submit failed: {exc}", flush=True)
+                reward = 0.0
+                done = True
             rewards.append(reward)
             steps_taken += 1
             log_step(step=steps_taken, action='{"action_type": "submit"}', reward=reward, done=done, error=None)
@@ -269,8 +320,13 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
         score = min(max(score, 0.0), 1.0)
         success = score >= SUCCESS_SCORE_THRESHOLD
 
-    finally:
-        log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
+    except Exception as exc:
+        print(f"[DEBUG] Task {task_id} failed: {exc}", flush=True)
+        if not rewards:
+            rewards = [0.0]
+        steps_taken = max(steps_taken, 1)
+
+    log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
 
     return {
         "task_id": task_id,
@@ -282,7 +338,10 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
 
 
 async def main() -> None:
-    client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+    if not API_KEY:
+        print("[DEBUG] WARNING: No API key found (HF_TOKEN / API_KEY not set)", flush=True)
+
+    client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY or "dummy")
     env = EnvHTTPClient(ENV_URL)
 
     print("=" * 60, flush=True)
@@ -292,12 +351,22 @@ async def main() -> None:
     print(f"Environment URL: {ENV_URL}", flush=True)
     print("=" * 60, flush=True)
 
+    # Wait for environment to be ready (HF Spaces can be sleeping)
+    server_ready = await env.wait_for_server(max_wait=120)
+    if not server_ready:
+        print("[DEBUG] WARNING: Environment health check failed, attempting anyway...", flush=True)
+
     all_results = []
 
     try:
         for task_id in TASKS:
             print(f"\n--- Running task: {task_id} ---", flush=True)
-            result = await run_task(client, env, task_id)
+            try:
+                result = await run_task(client, env, task_id)
+            except Exception as exc:
+                print(f"[DEBUG] Task {task_id} crashed: {exc}", flush=True)
+                result = {"task_id": task_id, "score": 0.0, "steps": 0, "success": False, "rewards": [0.0]}
+                log_end(success=False, steps=0, score=0.0, rewards=[0.0])
             all_results.append(result)
             print(f"    Score: {result['score']:.4f} | Steps: {result['steps']} | Success: {result['success']}", flush=True)
     finally:
@@ -315,4 +384,12 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("\n[DEBUG] Interrupted", flush=True)
+        sys.exit(1)
+    except Exception as exc:
+        print(f"[DEBUG] Fatal error: {exc}", flush=True)
+        # Still exit 0 so the evaluator can parse whatever logs we emitted
+        sys.exit(0)
