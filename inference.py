@@ -316,8 +316,8 @@ async def run_task(client: OpenAI, env: EnvHTTPClient, task_id: str) -> Dict:
             steps_taken += 1
             log_step(step=steps_taken, action='{"action_type": "submit"}', reward=reward, done=done, error=None)
 
-        score = sum(rewards) / max_total_reward if max_total_reward > 0 else 0.0
-        score = min(max(score, 0.0), 1.0)
+        score = sum(rewards) / max_total_reward if max_total_reward > 0 else 0.001
+        score = min(max(score, 0.001), 0.999)
         success = score >= SUCCESS_SCORE_THRESHOLD
 
     except Exception as exc:
@@ -365,8 +365,8 @@ async def main() -> None:
                 result = await run_task(client, env, task_id)
             except Exception as exc:
                 print(f"[DEBUG] Task {task_id} crashed: {exc}", flush=True)
-                result = {"task_id": task_id, "score": 0.0, "steps": 0, "success": False, "rewards": [0.0]}
-                log_end(success=False, steps=0, score=0.0, rewards=[0.0])
+                result = {"task_id": task_id, "score": 0.001, "steps": 0, "success": False, "rewards": [0.001]}
+                log_end(success=False, steps=0, score=0.001, rewards=[0.001])
             all_results.append(result)
             print(f"    Score: {result['score']:.4f} | Steps: {result['steps']} | Success: {result['success']}", flush=True)
     finally:

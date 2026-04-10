@@ -34,7 +34,7 @@ def grade_episode(
 
     if total_issues == 0:
         return {
-            "score": 1.0,
+            "score": 0.999,
             "field_accuracy": 1.0,
             "false_positives": 0,
             "duplicate_accuracy": 1.0,
@@ -121,7 +121,7 @@ def grade_episode(
             + (1.0 - fp_penalty) * 0.10
         )
 
-    score = max(0.0, min(1.0, raw_score))
+    score = max(0.001, min(0.999, raw_score))
 
     return {
         "score": round(score, 4),
